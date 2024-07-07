@@ -1,6 +1,7 @@
 import 'package:bts_manager_app/backend/api_request/authenitcation.dart';
 import 'package:bts_manager_app/models/login_model.dart';
 import 'package:bts_manager_app/models/user.dart';
+import 'package:bts_manager_app/page/bts_list_page.dart';
 import 'package:bts_manager_app/providers/authentication.provider.dart';
 
 import 'dart:async';
@@ -298,6 +299,12 @@ class _LoginWidgetState extends State<LoginWidget>
                                                       context,
                                                       listen: false)
                                                   .setUser(user);
+                                              Navigator.pushReplacement(
+                                                context,
+                                                MaterialPageRoute(
+                                                    builder: (context) =>
+                                                        const BtsListPage()),
+                                              );
                                             }
                                           }
                                         }(),

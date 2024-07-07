@@ -1,3 +1,4 @@
+import 'package:bts_manager_app/backend/api_request/authenitcation.dart';
 import 'package:bts_manager_app/providers/authentication.provider.dart';
 import 'package:flutter/material.dart';
 import 'package:bts_manager_app/page/login.dart';
@@ -11,13 +12,14 @@ void main() {
       ],
       child: Consumer<AuthenticationProvider>(
         builder: (context, auth, child) {
-          return const MyApp();
+          return MyApp();
         },
       )));
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+  MyApp({super.key});
+  final AuthenticationService _authenticationService = AuthenticationService();
 
   @override
   Widget build(BuildContext context) {
@@ -30,8 +32,16 @@ class MyApp extends StatelessWidget {
               secondary: const Color.fromARGB(1, 237, 28, 36)),
           useMaterial3: true,
           textTheme: GoogleFonts.playTextTheme()),
-      home:
-          const LoginWidget(), // Update the home property to navigate to LoginPage
+      home: FutureBuilder<String?>(
+        future: _authenticationService.getAccessToken(),
+        builder: (context, snapshot) {
+          if (snapshot.hasData) {
+            return const MyHomePage(title: 'Home Page');
+          } else {
+            return const LoginWidget();
+          }
+        },
+      ), // Update the home property to navigate to LoginPage
     );
   }
 }
