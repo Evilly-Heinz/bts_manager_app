@@ -36,7 +36,7 @@ class _DetailAlertState extends State<DetailAlert> {
               clipBehavior: Clip.antiAlias,
               child: ListView.separated(
                 shrinkWrap: true,
-                padding: const EdgeInsets.fromLTRB(0, 4, 0, 4),
+                padding: const EdgeInsets.fromLTRB(0, 0, 0, 4),
                 itemCount: alertMessages.length,
                 itemBuilder: (context, index) {
                   AlertMessage alertMessage = alertMessages[index];
@@ -49,7 +49,7 @@ class _DetailAlertState extends State<DetailAlert> {
                       leading: alertMessage.icon);
                 },
                 separatorBuilder: (context, index) => const Divider(
-                  height: 4,
+                  height: 1,
                 ),
               ),
             ),

@@ -25,12 +25,14 @@ class _QuickControlState extends State<QuickControl> {
             initTemperature:
                 widget.centerControl.status!.airConditionTemperature,
             title: "Điều hòa 1",
+            decorationColor: const Color(0xFFCAFEBE),
           ),
           AirconditionerControl(
             initStatus: widget.centerControl.status!.airConditionStatus2,
             initTemperature:
                 widget.centerControl.status!.airConditionTemperature2,
             title: "Điều hòa 2",
+            decorationColor: const Color(0xFFFDBBD4),
           ),
         ]),
         const SizedBox(
@@ -41,10 +43,12 @@ class _QuickControlState extends State<QuickControl> {
             OnOffControl(
               title: 'Quạt thông gió',
               initStatus: widget.centerControl.status?.heatPumpStatus ?? false,
+              decorationColor: const Color(0xFFC1D3FE),
             ),
             OnOffControl(
               title: 'Chuông báo',
               initStatus: widget.centerControl.status?.fireAlarmStatus ?? false,
+              decorationColor: const Color(0xFFFECCBE),
             )
           ],
         ),

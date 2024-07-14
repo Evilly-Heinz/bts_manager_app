@@ -31,7 +31,13 @@ class MyApp extends StatelessWidget {
               primary: const Color.fromARGB(1, 9, 10, 100),
               secondary: const Color.fromARGB(1, 237, 28, 36)),
           useMaterial3: true,
-          textTheme: GoogleFonts.playTextTheme()),
+        textTheme: GoogleFonts.playTextTheme(),
+        cardTheme: CardTheme(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(20),
+          ),
+        ),
+      ),
       home: FutureBuilder<String?>(
         future: _authenticationService.getAccessToken(),
         builder: (context, snapshot) {

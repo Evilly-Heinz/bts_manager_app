@@ -58,7 +58,7 @@ AlertValidation generateAlertMessages(Map<String, bool>? alert,
         .where((entry) => entry.key != 'HEART_BEAT')
         .map((entry) {
       String key = entry.key;
-      dynamic value = entry.value;
+      bool value = alert[key] ?? false;
       String message = '⚠️ Cảnh báo $key đã được kích hoạt.';
 
       String severity = 'error';
@@ -181,6 +181,23 @@ AlertValidation generateAlertMessages(Map<String, bool>? alert,
     })
   ];
 
+  errors.sort((a, b) {
+    if (a.isNew != b.isNew) {
+      return a.isNew ? -1 : 1;
+    } else {
+      if (a.severity == 'error' && b.severity != 'error') {
+        return -1;
+      } else if (a.severity != 'error' && b.severity == 'error') {
+        return 1;
+      } else if (a.severity == 'warning' && b.severity == 'info') {
+        return -1;
+      } else if (a.severity == 'info' && b.severity == 'warning') {
+        return 1;
+      } else {
+        return 0;
+      }
+    }
+  });
   return AlertValidation(valid: valid, errors: errors);
 }
 
