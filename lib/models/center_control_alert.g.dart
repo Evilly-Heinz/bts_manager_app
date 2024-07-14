@@ -5,47 +5,64 @@ part of 'center_control_alert.dart';
 // **************************************************************************
 // JsonSerializableGenerator
 // **************************************************************************
-
+/**
+ * FIRE
+SMOKE
+WATER
+TEMPERATURE
+HUMIDITY
+DC_CURRENT
+DC_CURRENT
+AC_CURRENT
+AC_VOLTAGE
+FUEL
+HUMAN
+UPS
+GENERATOR
+DISCONNECT
+PHASE
+HEART_BEAT
+ */
 CenterControlAlert _$CenterControlAlertFromJson(Map<String, dynamic> json) =>
     CenterControlAlert(
-      fireDetected: json['fireDetected'] as bool? ?? false,
-      smokeDetected: json['smokeDetected'] as bool? ?? false,
-      flooded: json['flooded'] as bool? ?? false,
-      temperatureOverrange: json['temperatureOverrange'] as bool? ?? false,
-      humidityOverrange: json['humidityOverrange'] as bool? ?? false,
-      dcCurrentOverrange: json['dcCurrentOverrange'] as bool? ?? false,
-      dcVoltageOverrange: json['dcVoltageOverrange'] as bool? ?? false,
-      acCurrentOverrange: json['acCurrentOverrange'] as bool? ?? false,
-      acVoltageOverrange: json['acVoltageOverrange'] as bool? ?? false,
-      fuelLow: json['fuelLow'] as bool? ?? false,
-      motionDetected: json['motionDetected'] as bool? ?? false,
-      upsUsing: json['upsUsing'] as bool? ?? false,
-      generator: json['generator'] as bool? ?? false,
-      controllerDisconnect: json['controllerDisconnect'] as bool? ?? false,
-      lostPhase: json['lostPhase'] as bool? ?? false,
-      heartBeat: json['heartBeat'] as bool? ?? false,
-      door1OpenDetected: json['door1OpenDetected'] as bool? ?? false,
-      door2OpenDetected: json['door2OpenDetected'] as bool? ?? false,
+      fireDetected: json['FIRE'] as bool? ?? false,
+      smokeDetected: json['SMOKE'] as bool? ?? false,
+      flooded: json['WATER'] as bool? ?? false,
+      temperatureOverrange: json['TEMPERATURE'] as bool? ?? false,
+      humidityOverrange: json['HUMIDITY'] as bool? ?? false,
+      dcCurrentOverrange: json['DC_CURRENT'] as bool? ?? false,
+      dcVoltageOverrange: json['DC_VOLTAGE'] as bool? ?? false,
+      acCurrentOverrange: json['AC_CURRENT'] as bool? ?? false,
+      acVoltageOverrange: json['AC_VOLTAGE'] as bool? ?? false,
+      fuelLow: json['FUEL'] as bool? ?? false,
+      motionDetected: json['HUMAN'] as bool? ?? false,
+      upsUsing: json['UPS'] as bool? ?? false,
+      generator: json['GENERATOR'] as bool? ?? false,
+      controllerDisconnect: json['DISCONNECT'] as bool? ?? false,
+      lostPhase: json['PHASE'] as bool? ?? false,
+      heartBeat: json['HEART_BEAT'] as bool? ?? false,
+      door1OpenDetected: json['DOOR1'] as bool? ?? false,
+      door2OpenDetected: json['DOOR2'] as bool? ?? false,
     );
 
-Map<String, dynamic> _$CenterControlAlertToJson(CenterControlAlert instance) =>
-    <String, dynamic>{
-      'fireDetected': instance.fireDetected,
-      'smokeDetected': instance.smokeDetected,
-      'flooded': instance.flooded,
-      'temperatureOverrange': instance.temperatureOverrange,
-      'humidityOverrange': instance.humidityOverrange,
-      'dcCurrentOverrange': instance.dcCurrentOverrange,
-      'dcVoltageOverrange': instance.dcVoltageOverrange,
-      'acCurrentOverrange': instance.acCurrentOverrange,
-      'acVoltageOverrange': instance.acVoltageOverrange,
-      'fuelLow': instance.fuelLow,
-      'motionDetected': instance.motionDetected,
-      'upsUsing': instance.upsUsing,
-      'generator': instance.generator,
-      'controllerDisconnect': instance.controllerDisconnect,
-      'lostPhase': instance.lostPhase,
-      'heartBeat': instance.heartBeat,
-      'door1OpenDetected': instance.door1OpenDetected,
-      'door2OpenDetected': instance.door2OpenDetected,
+Map<String, bool> _$CenterControlAlertToJson(CenterControlAlert instance) =>
+    <String, bool>{
+      'FIRE': instance.fireDetected,
+      'SMOKE': instance.smokeDetected,
+      'WATER': instance.flooded,
+      'TEMPERATURE': instance.temperatureOverrange,
+      'HUMIDITY': instance.humidityOverrange,
+      'DC_CURRENT': instance.dcCurrentOverrange,
+      'DC_VOLTAGE': instance.dcVoltageOverrange,
+      'AC_CURRENT': instance.acCurrentOverrange,
+      'AC_VOLTAGE': instance.acVoltageOverrange,
+      'FUEL': instance.fuelLow,
+      'HUMAN': instance.motionDetected,
+      'UPS': instance.upsUsing,
+      'GENERATOR': instance.generator,
+      'DISCONNECT': instance.controllerDisconnect,
+      'PHASE': instance.lostPhase,
+      'HEART_BEAT': instance.heartBeat,
+      'DOOR1': instance.door1OpenDetected,
+      'DOOR2': instance.door2OpenDetected,
     };

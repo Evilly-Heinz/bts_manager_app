@@ -1,4 +1,5 @@
 import 'package:bts_manager_app/models/center_control.dart';
+import 'package:bts_manager_app/page/components/adaptive_grid.dart';
 import 'package:bts_manager_app/page/components/airconditioner_control.dart';
 import 'package:bts_manager_app/page/components/on_off_control.dart';
 import 'package:flutter/material.dart';
@@ -18,39 +19,33 @@ class _QuickControlState extends State<QuickControl> {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        Row(children: [
-          Expanded(
-            child: AirconditionerControl(
-              initStatus: widget.centerControl.status!.airConditionStatus,
-              initTemperature:
-                  widget.centerControl.status!.airConditionTemperature,
-              title: "Điều hòa 1",
-            ),
+        AdaptiveGrid(children: [
+          AirconditionerControl(
+            initStatus: widget.centerControl.status!.airConditionStatus,
+            initTemperature:
+                widget.centerControl.status!.airConditionTemperature,
+            title: "Điều hòa 1",
           ),
-          Expanded(
-            child: AirconditionerControl(
-              initStatus: widget.centerControl.status!.airConditionStatus2,
-              initTemperature:
-                  widget.centerControl.status!.airConditionTemperature2,
-              title: "Điều hòa 2",
-            ),
+          AirconditionerControl(
+            initStatus: widget.centerControl.status!.airConditionStatus2,
+            initTemperature:
+                widget.centerControl.status!.airConditionTemperature2,
+            title: "Điều hòa 2",
           ),
         ]),
         const SizedBox(
           height: 8,
         ),
-        Row(
+        AdaptiveGrid(
           children: [
-            Expanded(
-                child: OnOffControl(
+            OnOffControl(
               title: 'Quạt thông gió',
               initStatus: widget.centerControl.status?.heatPumpStatus ?? false,
-            )),
-            Expanded(
-                child: OnOffControl(
+            ),
+            OnOffControl(
               title: 'Chuông báo',
               initStatus: widget.centerControl.status?.fireAlarmStatus ?? false,
-            ))
+            )
           ],
         ),
         const SizedBox(

@@ -1,12 +1,13 @@
 import 'package:bts_manager_app/backend/api_request/center_control_manager.dart';
 import 'package:bts_manager_app/models/center_control.dart';
+import 'package:bts_manager_app/page/components/detail_alert.dart';
 import 'package:bts_manager_app/page/components/detail_status.dart';
 import 'package:bts_manager_app/providers/authentication.provider.dart';
 import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:provider/provider.dart'; // Import the package that contains the Carousel class
 
-import 'status_quick_view.dart';
+import 'components/status_quick_view.dart';
 
 class CenterControlDetail extends StatefulWidget {
   final String centerControlId;
@@ -83,15 +84,9 @@ class _CenterControlDetailState extends State<CenterControlDetail> {
                       height: double.infinity,
                     ),
                     items: [
-                      DetailStatus(centerControl: centerControl),
                       StatusQuickView(centerControl: centerControl),
-                      Container(
-                        height: double.infinity,
-                        color: Colors.green,
-                        child: const Center(
-                          child: Text('Card 3'),
-                        ),
-                      ),
+                      DetailAlert(centerControl: centerControl),
+                      DetailStatus(centerControl: centerControl),
                     ],
                   ),
                 ),

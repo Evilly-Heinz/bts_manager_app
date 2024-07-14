@@ -45,5 +45,5 @@ class CenterControlAlert {
 
   factory CenterControlAlert.fromJson(Map<String, dynamic> json) =>
       _$CenterControlAlertFromJson(json);
-  Map<String, dynamic> toJson() => _$CenterControlAlertToJson(this);
+  Map<String, bool> toJson() => _$CenterControlAlertToJson(this);
 }
