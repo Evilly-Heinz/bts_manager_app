@@ -1,12 +1,10 @@
 import 'dart:convert';
+import 'package:bts_manager_app/backend/api_request/constants.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:bts_manager_app/models/user.dart';
 import 'package:http/http.dart' as http;
 
 class AuthenticationService {
-  static const String baseUrl = 'https://localhost:7125';
-  // static const String baseUrl = 'https://cloudbts.info';
-
   Future<User> login(String email, String password) async {
     final url = Uri.parse('$baseUrl/api/login');
     final response = await http.post(

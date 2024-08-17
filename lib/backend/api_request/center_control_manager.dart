@@ -1,11 +1,10 @@
 import 'dart:convert';
 
+import 'package:bts_manager_app/backend/api_request/constants.dart';
 import 'package:bts_manager_app/models/center_control.dart';
 import 'package:http/http.dart' as http;
 
 class CenterControlManager {
-  static const String baseUrl = 'https://localhost:7125';
-  // static const String baseUrl = 'https://cloudbts.info';
   final String accessToken;
 
   CenterControlManager(this.accessToken);
