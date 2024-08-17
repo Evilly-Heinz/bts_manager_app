@@ -42,6 +42,31 @@ class _LoginWidgetState extends State<LoginWidget>
     super.dispose();
   }
 
+
+  login() async {
+    final validation = _formKey.currentState!.validate();
+
+    if (validation) {
+      User user = await _authenticationService.login(
+          _model.emailAddressTextController!.text,
+          _model.passwordTextController!.text);
+      if (user.accessToken.isEmpty) {
+        return;
+      }
+      if (mounted) {
+        final authenticationProvider =
+            Provider.of<AuthenticationProvider>(context, listen: false);
+        authenticationProvider.setUser(user);
+      }
+      if (mounted) {
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (context) => const BtsListPage()),
+        );
+      }
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
@@ -287,27 +312,7 @@ class _LoginWidgetState extends State<LoginWidget>
                                     ),
                                     onPressed: () async {
                                       unawaited(
-                                        () async {
-                                          final validation =
-                                              _formKey.currentState!.validate();
-
-                                          if (validation) {
-                                            User user = await _authenticationService.login(_model.emailAddressTextController!.text,
-                                               _model.passwordTextController!.text);
-                                            if (context.mounted) {
-                                              Provider.of<AuthenticationProvider>(
-                                                      context,
-                                                      listen: false)
-                                                  .setUser(user);
-                                              Navigator.pushReplacement(
-                                                context,
-                                                MaterialPageRoute(
-                                                    builder: (context) =>
-                                                        const BtsListPage()),
-                                              );
-                                            }
-                                          }
-                                        }(),
+                                        login(),
                                       );
 
                                       setState(() {});

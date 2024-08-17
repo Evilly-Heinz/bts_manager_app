@@ -1,14 +1,19 @@
 import 'package:bts_manager_app/backend/api_request/authenitcation.dart';
 import 'package:bts_manager_app/providers/authentication.provider.dart';
+import 'package:bts_manager_app/providers/mqtt.provider.dart';
 import 'package:flutter/material.dart';
 import 'package:bts_manager_app/page/login.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 
+import 'providers/alert_manager.dart';
+
 void main() {
   runApp(MultiProvider(
       providers: [
         Provider(create: (context) => AuthenticationProvider()),
+        ChangeNotifierProvider(create: (context) => AlertManager()),
+        Provider(create: (context) => MQTTClientProvider()),
       ],
       child: Consumer<AuthenticationProvider>(
         builder: (context, auth, child) {

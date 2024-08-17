@@ -1,56 +1,12 @@
+import 'package:bts_manager_app/models/alert_notification.dart';
 import 'package:bts_manager_app/models/center_control_alert.dart';
 import 'package:flutter/material.dart';
 import 'package:material_symbols_icons/material_symbols_icons.dart';
-
-final defaultAlert = {
-  'AC_CURRENT': false,
-  'AC_VOLTAGE': false,
-  'DC_CURRENT': false,
-  'DC_VOLTAGE': false,
-  'DISCONNECT': false,
-  'FIRE': false,
-  'FUEL': false,
-  'GENERATOR': false,
-  'HEART_BEAT': false,
-  'HUMAN': false,
-  'HUMIDITY': false,
-  'PHASE': false,
-  'SMOKE': false,
-  'TEMPERATURE': false,
-  'UPS': false,
-  'WATER': false,
-  'DOOR_1': false,
-  'DOOR_2': false,
-};
-
-class AlertMessage {
-  final String message;
-  final Widget icon;
-  final String severity;
-  final bool isNew;
-
-  AlertMessage({
-    required this.message,
-    required this.icon,
-    required this.severity,
-    required this.isNew,
-  });
-}
-
-class AlertValidation {
-  final bool valid;
-  final List<AlertMessage> errors;
-
-  AlertValidation({
-    required this.valid,
-    required this.errors,
-  });
-}
-
-AlertValidation generateAlertMessages(Map<String, bool>? alert,
-    Map<String, bool>? currentAlert, BuildContext context) {
+// '_Map<String, dynamic>' is not a subtype of type 'Map<String, bool>?
+AlertValidation generateAlertMessages(String centerControlId,
+    Map<String, dynamic>? alert, Map<String, bool>? currentAlert) {
   if (alert == null) {
-    return generateAlertMessages(defaultAlert, currentAlert, context);
+    return generateAlertMessages(centerControlId, defaultAlert, currentAlert);
   }
   bool valid = true;
   List<AlertMessage> errors = [
@@ -168,6 +124,7 @@ AlertValidation generateAlertMessages(Map<String, bool>? alert,
       }
 
       return AlertMessage(
+        centerControlId: centerControlId,
         message: message,
         icon: Icon(
           symbol,

@@ -11,7 +11,7 @@ class CenterControl {
   final String id;
   final String name;
   final String code;
-  final bool lastStatusError;
+  bool lastStatusError;
   final String? accessToken;
   final String locationId;
   final Location location;

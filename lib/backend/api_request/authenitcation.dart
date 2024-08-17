@@ -4,10 +4,11 @@ import 'package:bts_manager_app/models/user.dart';
 import 'package:http/http.dart' as http;
 
 class AuthenticationService {
-  static const String _baseUrl = 'https://localhost:7125';
+  static const String baseUrl = 'https://localhost:7125';
+  // static const String baseUrl = 'https://cloudbts.info';
 
   Future<User> login(String email, String password) async {
-    final url = Uri.parse('$_baseUrl/api/login');
+    final url = Uri.parse('$baseUrl/api/login');
     final response = await http.post(
       url,
       headers: {

@@ -1,4 +1,5 @@
 import 'package:bts_manager_app/models/ac_power_supply.dart';
+import 'package:bts_manager_app/models/alert_notification.dart';
 import 'package:bts_manager_app/models/center_control.dart';
 import 'package:bts_manager_app/page/components/adaptive_grid.dart';
 import 'package:bts_manager_app/page/components/card_data.dart';
@@ -18,9 +19,9 @@ class StatusQuickView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     AlertValidation alertValidation = generateAlertMessages(
+        centerControl.id,
       centerControl.alert?.toJson(),
-      null,
-      context,
+      null
     );
     List<AlertMessage> alertMessages = alertValidation.errors;
     return Column(

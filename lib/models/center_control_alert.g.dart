@@ -5,24 +5,7 @@ part of 'center_control_alert.dart';
 // **************************************************************************
 // JsonSerializableGenerator
 // **************************************************************************
-/**
- * FIRE
-SMOKE
-WATER
-TEMPERATURE
-HUMIDITY
-DC_CURRENT
-DC_CURRENT
-AC_CURRENT
-AC_VOLTAGE
-FUEL
-HUMAN
-UPS
-GENERATOR
-DISCONNECT
-PHASE
-HEART_BEAT
- */
+
 CenterControlAlert _$CenterControlAlertFromJson(Map<String, dynamic> json) =>
     CenterControlAlert(
       fireDetected: json['FIRE'] as bool? ?? false,

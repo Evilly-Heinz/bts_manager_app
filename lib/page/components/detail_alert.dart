@@ -1,3 +1,4 @@
+import 'package:bts_manager_app/models/alert_notification.dart';
 import 'package:bts_manager_app/models/center_control.dart';
 import 'package:flutter/material.dart';
 
@@ -16,9 +17,9 @@ class _DetailAlertState extends State<DetailAlert> {
   @override
   Widget build(BuildContext context) {
     AlertValidation alertValidation = generateAlertMessages(
+        widget.centerControl.id,
       widget.centerControl.alert?.toJson(),
-      null,
-      context,
+      null
     );
     List<AlertMessage> alertMessages = alertValidation.errors;
     return Column(
