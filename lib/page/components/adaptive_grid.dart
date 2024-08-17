@@ -7,7 +7,7 @@ class AdaptiveGrid extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    bool isSmallScreen = MediaQuery.of(context).size.width < 450;
+    bool isSmallScreen = MediaQuery.of(context).size.width < 540;
     return isSmallScreen
         ? Column(children: children)
         : Row(children: children.map((e) => Expanded(child: e)).toList());

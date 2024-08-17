@@ -5,6 +5,7 @@ import 'dart:io';
 import 'package:bts_manager_app/common/utils/mqtt_message_utils.dart';
 import 'package:bts_manager_app/models/alert_notification.dart';
 import 'package:bts_manager_app/models/center_control.dart';
+import 'package:bts_manager_app/models/center_control_status.dart';
 import 'package:bts_manager_app/page/components/generate_alert.dart';
 import 'package:bts_manager_app/models/setting.dart';
 import 'package:flutter/material.dart';
@@ -32,6 +33,9 @@ class MQTTClientProvider {
       StreamController.broadcast();
   Stream<AlertMessage> get alert => _alertManager.stream;
 
+  final StreamController<CenterControlStatus> centerController =
+      StreamController.broadcast();
+  Stream<CenterControlStatus> get centerControl => centerController.stream;
   MQTTClientProvider();
   // Example methods:
   Future<MqttClientConnectionStatus?> connect(Setting setting) async {
@@ -74,6 +78,10 @@ class MQTTClientProvider {
                 _alertManager.add(alertMessage);
               }
             }
+          } else if (topic.action == 'status') {
+            final status = CenterControlStatus.fromMqttMessage(
+                topic.centerControlCode, jsonDecode(payload));
+            centerController.add(status);
           }
         });
       }
@@ -94,12 +102,15 @@ class MQTTClientProvider {
     client.publishMessage(topic, MqttQos.atLeastOnce, builder.payload!);
   }
 
-  void subscribe(String topic) {
-    client.subscribe(topic, MqttQos.atMostOnce);
+  void subscribe(CenterControl centerControl) {
+    client.subscribe(
+        '$appPrefix/status/${centerControl.location.area}/${centerControl.code}',
+        MqttQos.atMostOnce);
   }
 
-  void unsubscribe(String topic) {
-    client.unsubscribe(topic);
+  void unsubscribe(CenterControl centerControl) {
+    client.unsubscribe(
+        '$appPrefix/status/${centerControl.location.area}/${centerControl.code}');
   }
 
   void sendCommand(

@@ -16,8 +16,8 @@ class CenterControl {
   final String locationId;
   final Location location;
   final Configuration? configuration;
-  final CenterControlStatus? status;
-  final CenterControlAlert? alert;
+  CenterControlStatus? status;
+  CenterControlAlert? alert;
 
   CenterControl({
     required this.id,
