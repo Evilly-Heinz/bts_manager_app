@@ -3,6 +3,7 @@ import 'package:bts_manager_app/models/center_control.dart';
 import 'package:bts_manager_app/page/components/detail_alert.dart';
 import 'package:bts_manager_app/page/components/detail_status.dart';
 import 'package:bts_manager_app/providers/authentication.provider.dart';
+import 'package:bts_manager_app/providers/mqtt.provider.dart';
 import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:provider/provider.dart'; // Import the package that contains the Carousel class
@@ -27,6 +28,12 @@ class _CenterControlDetailState extends State<CenterControlDetail> {
     final authProvider =
         Provider.of<AuthenticationProvider>(context, listen: false);
     centerControlManager = CenterControlManager(authProvider.getAccessToken()!);
+
+    final mqttClientProvider =
+        Provider.of<MQTTClientProvider>(context, listen: false);
+    mqttClientProvider.alert.listen((event) {
+      fetchCenterControl();
+    });
   }
 
   Future<CenterControl> fetchCenterControl() async {
@@ -75,7 +82,7 @@ class _CenterControlDetailState extends State<CenterControlDetail> {
             return Stack(
               children: [
                 Padding(
-                  padding: const EdgeInsets.fromLTRB(28, 16, 28, 16),
+                  padding: const EdgeInsets.all(10),
                   child: CarouselSlider(
                     carouselController: _controller,
                     options: CarouselOptions(
@@ -91,7 +98,7 @@ class _CenterControlDetailState extends State<CenterControlDetail> {
                   ),
                 ),
                 Positioned(
-                  left: 12,
+                  left: 5,
                   top: MediaQuery.of(context).size.height / 2 - 24,
                   child: Container(
                     decoration: BoxDecoration(
@@ -118,7 +125,7 @@ class _CenterControlDetailState extends State<CenterControlDetail> {
                   ),
                 ),
                 Positioned(
-                  right: 12,
+                  right: 5,
                   top: MediaQuery.of(context).size.height / 2 - 24,
                   child: Container(
                     decoration: BoxDecoration(

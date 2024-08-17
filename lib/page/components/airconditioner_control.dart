@@ -1,37 +1,37 @@
 import 'package:flutter/material.dart';
 
+typedef AirconditionerControlSateChange = void Function(
+    double temperature, bool status);
 class AirconditionerControl extends StatefulWidget {
-  final double? initTemperature;
-  final bool? initStatus;
+  final double initTemperature;
+  final bool initStatus;
   final String title;
   final Color decorationColor;
+  final bool readOnly;
+  final AirconditionerControlSateChange? onControlSateChange;
   const AirconditionerControl(
       {super.key,
-      this.initTemperature,
-      this.initStatus,
+      this.initTemperature = 16,
+      this.initStatus = true,
       required this.title,
-      required this.decorationColor});
+      required this.decorationColor,
+      this.readOnly = false,
+      this.onControlSateChange});
 
   @override
   State<AirconditionerControl> createState() => _AirconditionerControlState();
 }
 
 class _AirconditionerControlState extends State<AirconditionerControl> {
-  double temperature = 16;
-  bool status = false;
   @override
   void initState() {
     super.initState();
-    if (widget.initTemperature != null) {
-      temperature = widget.initTemperature!;
-    }
-    if (widget.initStatus != null) {
-      status = widget.initStatus!;
-    }
   }
 
   @override
   Widget build(BuildContext context) {
+    double temperature = widget.initTemperature;
+    bool status = widget.initStatus;
     return Card(
       child: Container(
         decoration: BoxDecoration(
@@ -62,9 +62,10 @@ class _AirconditionerControlState extends State<AirconditionerControl> {
                 value: status,
                 activeColor: Colors.blue,
                 onChanged: (value) {
-                  setState(() {
-                    status = value;
-                  });
+                  if (widget.readOnly) {
+                    return;
+                  }
+                  widget.onControlSateChange?.call(temperature, !status);
                 },
               ),
               ListTile(
@@ -81,10 +82,13 @@ class _AirconditionerControlState extends State<AirconditionerControl> {
                       IconButton(
                         icon: const Icon(Icons.remove),
                         onPressed: () {
+                          if (widget.readOnly) {
+                            return;
+                          }
                           if (temperature >= 16.5) {
-                            setState(() {
                               temperature -= 0.5;
-                            });
+                            widget.onControlSateChange
+                                ?.call(temperature, status);
                           }
                         },
                       ),
@@ -98,10 +102,13 @@ class _AirconditionerControlState extends State<AirconditionerControl> {
                       IconButton(
                         icon: const Icon(Icons.add),
                         onPressed: () {
+                          if (widget.readOnly) {
+                            return;
+                          }
                           if (temperature <= 29.5) {
-                            setState(() {
-                              temperature += 0.5;
-                            });
+                            temperature += 0.5;
+                            widget.onControlSateChange
+                                ?.call(temperature, status);
                           }
                         },
                       ),

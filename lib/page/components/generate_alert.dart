@@ -110,7 +110,9 @@ AlertValidation generateAlertMessages(String centerControlId,
           break;
         case 'PHASE':
           message =
-              value ? 'Phát hiện mất cân bằng pha!' : 'Pha hoạt động ổn định';
+              value
+              ? 'Tần số hoạt động không ổn định'
+              : 'Tần số hoạt động ổn định';
           symbol = Icons.settings_input_component;
           break;
         case 'DOOR_1':
@@ -120,6 +122,24 @@ AlertValidation generateAlertMessages(String centerControlId,
         case 'DOOR_2':
           message = value ? 'Phát hiện cửa số 2 đang mở!' : 'Cửa số 2 đóng';
           symbol = Symbols.door_back_door_rounded;
+          break;
+        case 'AIRCONDITIONER_BROKEN_1':
+          message = value
+              ? 'Điều hòa 1 bị hỏng!'
+              : 'Điều hòa 1 hoạt động bình thường';
+          symbol = Symbols.air_purifier_gen;
+          break;
+        case 'AIRCONDITIONER_BROKEN_2':
+          message = value
+              ? 'Điều hòa 2 bị hỏng!'
+              : 'Điều hòa 2 hoạt động bình thường';
+          symbol = Symbols.air_purifier_gen;
+          break;
+        case 'GENERATOR_BROKEN':
+          message = value
+              ? 'Máy phát điện bị hỏng!'
+              : 'Máy phát điện hoạt động bình thường';
+          symbol = Symbols.wind_power_rounded;
           break;
       }
 

@@ -4,6 +4,7 @@ import 'dart:io';
 
 import 'package:bts_manager_app/common/utils/mqtt_message_utils.dart';
 import 'package:bts_manager_app/models/alert_notification.dart';
+import 'package:bts_manager_app/models/center_control.dart';
 import 'package:bts_manager_app/page/components/generate_alert.dart';
 import 'package:bts_manager_app/models/setting.dart';
 import 'package:flutter/material.dart';
@@ -28,11 +29,10 @@ class MQTTClientProvider {
   final MqttConnectionState connectStatus = MqttConnectionState.disconnected;
 
   final StreamController<AlertMessage> _alertManager =
-      StreamController<AlertMessage>();
+      StreamController.broadcast();
   Stream<AlertMessage> get alert => _alertManager.stream;
 
   MQTTClientProvider();
-
   // Example methods:
   Future<MqttClientConnectionStatus?> connect(Setting setting) async {
     if (connectStatus != MqttConnectionState.disconnected) {
@@ -100,5 +100,17 @@ class MQTTClientProvider {
 
   void unsubscribe(String topic) {
     client.unsubscribe(topic);
+  }
+
+  void sendCommand(
+      CenterControl selectedCenterControl, Map<String, dynamic> data) {
+    publish(
+      '$appPrefix/control/${selectedCenterControl.location.area}/${selectedCenterControl.code}',
+      jsonEncode(data),
+    );
+  }
+
+  void dispose() {
+    _alertManager.close();
   }
 }

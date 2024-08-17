@@ -1,15 +1,17 @@
 import 'package:flutter/material.dart';
 
+typedef OnControlSateChange = void Function(bool value);
 class OnOffControl extends StatefulWidget {
   final String title;
   final bool initStatus;
   final Color decorationColor;
-
+  final OnControlSateChange? onControlSateChange;
   const OnOffControl(
       {super.key,
       required this.title,
       required this.initStatus,
-      required this.decorationColor});
+      required this.decorationColor,
+      this.onControlSateChange});
 
   @override
   State<OnOffControl> createState() => _OnOffControlState();
@@ -56,6 +58,7 @@ class _OnOffControlState extends State<OnOffControl> {
                 value: status,
                 activeColor: Colors.blue,
                 onChanged: (value) {
+                  widget.onControlSateChange?.call(value);
                   setState(() {
                     status = value;
                   });

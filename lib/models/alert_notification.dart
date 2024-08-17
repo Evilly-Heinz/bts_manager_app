@@ -19,6 +19,9 @@ final defaultAlert = {
   'WATER': false,
   'DOOR_1': false,
   'DOOR_2': false,
+  'AIRCONDITIONER_BROKEN_1': false,
+  'AIRCONDITIONER_BROKEN_2': false,
+  'GENERATOR_BROKEN': false
 };
 
 class AlertMessage {

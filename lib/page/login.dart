@@ -42,27 +42,38 @@ class _LoginWidgetState extends State<LoginWidget>
     super.dispose();
   }
 
-
   login() async {
     final validation = _formKey.currentState!.validate();
 
     if (validation) {
-      User user = await _authenticationService.login(
-          _model.emailAddressTextController!.text,
-          _model.passwordTextController!.text);
-      if (user.accessToken.isEmpty) {
-        return;
-      }
-      if (mounted) {
-        final authenticationProvider =
-            Provider.of<AuthenticationProvider>(context, listen: false);
-        authenticationProvider.setUser(user);
-      }
-      if (mounted) {
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(builder: (context) => const BtsListPage()),
-        );
+      try {
+        User user = await _authenticationService.login(
+            _model.emailAddressTextController!.text,
+            _model.passwordTextController!.text);
+
+        if (user.accessToken.isEmpty) {
+          return;
+        }
+        if (mounted) {
+          final authenticationProvider =
+              Provider.of<AuthenticationProvider>(context, listen: false);
+          authenticationProvider.setUser(user);
+        }
+        if (mounted) {
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(builder: (context) => const BtsListPage()),
+          );
+        }
+      } catch (e) {
+        if (mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text('Vui lòng kiểm tra lại thông tin đăng nhập'),
+              duration: Duration(seconds: 2),
+            ),
+          );
+        }
       }
     }
   }
