@@ -10,6 +10,15 @@ import 'package:material_symbols_icons/symbols.dart';
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+double parseDouble(dynamic value) {
+  if (value is String) {
+    return double.parse(value);
+  } else if (value is int) {
+    return value.toDouble();
+  } else {
+    return value;
+  }
+}
 class QuickControl extends StatefulWidget {
   final CenterControl centerControl;
   const QuickControl({super.key, required this.centerControl});
@@ -22,10 +31,12 @@ class _QuickControlState extends State<QuickControl> {
   bool autoControl = true;
   Map<String, dynamic> command = {};
   Timer? _debounce;
-
+  late MQTTClientProvider mqttClientProvider;
   @override
   void initState() {
     super.initState();
+    mqttClientProvider =
+        Provider.of<MQTTClientProvider>(context, listen: false);
     command = {
       'AIR_CONDITION_STATUS':
           widget.centerControl.status?.airConditionStatus ?? false,
@@ -37,13 +48,23 @@ class _QuickControlState extends State<QuickControl> {
           widget.centerControl.status?.airConditionTemperature2 ?? 16.0,
       'ALARM': widget.centerControl.status?.fireAlarmStatus ?? false,
       'FAN': widget.centerControl.status?.heatPumpStatus ?? false,
-      'AUTO_CONTROL': true,
+      'AUTO_CONTROL': autoControl,
+      'timestamp': DateTime.now().millisecondsSinceEpoch,
     };
+    mqttClientProvider.command.listen((event) {
+      if (event['timestamp'] == command['timestamp']) {
+        return;
+      }
+      if (mounted) {
+        setState(() {
+          command = event;
+          autoControl = event['AUTO_CONTROL'];
+        });
+      }
+    });
   }
 
   void sendControlMessage() {
-    final mqttClientProvider =
-        Provider.of<MQTTClientProvider>(context, listen: false);
     if (_debounce?.isActive ?? false) _debounce!.cancel();
     _debounce = Timer(const Duration(milliseconds: 500), () {
       mqttClientProvider.sendCommand(widget.centerControl, command);
@@ -71,6 +92,7 @@ class _QuickControlState extends State<QuickControl> {
               onControlSateChange: (value) {
                 setState(() {
                   command['AUTO_CONTROL'] = value;
+                  command['timestamp'] = DateTime.now().millisecondsSinceEpoch;
                 });
                 sendControlMessage();
               },
@@ -81,13 +103,14 @@ class _QuickControlState extends State<QuickControl> {
           AirconditionerControl(
             readOnly: command['AUTO_CONTROL'],
             initStatus: command['AIR_CONDITION_STATUS'],
-            initTemperature: command['AIR_CONDITION_TEMP'],
+            initTemperature: parseDouble(command['AIR_CONDITION_TEMP']),
             title: "Điều hòa 1",
             decorationColor: const Color(0xFFCAFEBE),
             onControlSateChange: (temperature, status) {
               setState(() {
                 command['AIR_CONDITION_TEMP'] = temperature;
                 command['AIR_CONDITION_STATUS'] = status;
+                command['timestamp'] = DateTime.now().millisecondsSinceEpoch;
               });
               sendControlMessage();
             },
@@ -95,13 +118,14 @@ class _QuickControlState extends State<QuickControl> {
           AirconditionerControl(
             readOnly: command['AUTO_CONTROL'],
             initStatus: command['AIR_CONDITION_STATUS_2'],
-            initTemperature: command['AIR_CONDITION_TEMP_2'],
+            initTemperature: parseDouble(command['AIR_CONDITION_TEMP_2']),
             title: "Điều hòa 2",
             decorationColor: const Color(0xFFFDBBD4),
             onControlSateChange: (temperature, status) {
               setState(() {
                 command['AIR_CONDITION_TEMP_2'] = temperature;
                 command['AIR_CONDITION_STATUS_2'] = status;
+                command['timestamp'] = DateTime.now().millisecondsSinceEpoch;
               });
               sendControlMessage();
             },
@@ -114,22 +138,24 @@ class _QuickControlState extends State<QuickControl> {
           children: [
             OnOffControl(
               title: 'Quạt thông gió',
-              initStatus: widget.centerControl.status?.heatPumpStatus ?? false,
+              initStatus: command['FAN'] ?? false,
               decorationColor: const Color(0xFFC1D3FE),
               onControlSateChange: (value) {
                 setState(() {
                   command['FAN'] = value;
+                  command['timestamp'] = DateTime.now().millisecondsSinceEpoch;
                 });
                 sendControlMessage();
               },
             ),
             OnOffControl(
               title: 'Chuông báo',
-              initStatus: widget.centerControl.status?.fireAlarmStatus ?? false,
+              initStatus: command['ALARM'] ?? false,
               decorationColor: const Color(0xFFFECCBE),
               onControlSateChange: (value) {
                 setState(() {
                   command['ALARM'] = value;
+                  command['timestamp'] = DateTime.now().millisecondsSinceEpoch;
                 });
                 sendControlMessage();
               },

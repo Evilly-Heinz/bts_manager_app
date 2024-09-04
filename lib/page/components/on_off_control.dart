@@ -18,16 +18,16 @@ class OnOffControl extends StatefulWidget {
 }
 
 class _OnOffControlState extends State<OnOffControl> {
-  bool status = false;
+  // bool status = false;
 
   @override
   void initState() {
     super.initState();
-    status = widget.initStatus;
   }
 
   @override
   Widget build(BuildContext context) {
+    bool status = widget.initStatus;
     return Card(
       child: Container(
         decoration: BoxDecoration(
@@ -59,9 +59,6 @@ class _OnOffControlState extends State<OnOffControl> {
                 activeColor: Colors.blue,
                 onChanged: (value) {
                   widget.onControlSateChange?.call(value);
-                  setState(() {
-                    status = value;
-                  });
                 },
               )
             ],

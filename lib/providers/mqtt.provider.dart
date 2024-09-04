@@ -36,8 +36,11 @@ class MQTTClientProvider {
   final StreamController<CenterControlStatus> centerController =
       StreamController.broadcast();
   Stream<CenterControlStatus> get centerControl => centerController.stream;
+
+  final StreamController<Map<String, dynamic>> commandController =
+      StreamController.broadcast();
+  Stream<Map<String, dynamic>> get command => commandController.stream;
   MQTTClientProvider();
-  // Example methods:
   Future<MqttClientConnectionStatus?> connect(Setting setting) async {
     if (connectStatus != MqttConnectionState.disconnected) {
       return null;
@@ -82,6 +85,13 @@ class MQTTClientProvider {
             final status = CenterControlStatus.fromMqttMessage(
                 topic.centerControlCode, jsonDecode(payload));
             centerController.add(status);
+          } else if (topic.action == 'control') {
+            final command = jsonDecode(payload);
+            if (command['timestamp'] != null) {
+              command['timestamp'] =
+                  DateTime.fromMillisecondsSinceEpoch(command['timestamp']);
+            }
+            commandController.add(command);
           }
         });
       }
@@ -106,11 +116,16 @@ class MQTTClientProvider {
     client.subscribe(
         '$appPrefix/status/${centerControl.location.area}/${centerControl.code}',
         MqttQos.atMostOnce);
+    client.subscribe(
+        '$appPrefix/control/${centerControl.location.area}/${centerControl.code}',
+        MqttQos.atMostOnce);
   }
 
   void unsubscribe(CenterControl centerControl) {
     client.unsubscribe(
         '$appPrefix/status/${centerControl.location.area}/${centerControl.code}');
+    client.unsubscribe(
+        '$appPrefix/control/${centerControl.location.area}/${centerControl.code}');
   }
 
   void sendCommand(

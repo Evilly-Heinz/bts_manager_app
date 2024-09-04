@@ -26,6 +26,9 @@ CenterControlAlert _$CenterControlAlertFromJson(Map<String, dynamic> json) =>
       heartBeat: json['HEART_BEAT'] as bool? ?? false,
       door1OpenDetected: json['DOOR1'] as bool? ?? false,
       door2OpenDetected: json['DOOR2'] as bool? ?? false,
+      airConditioner1Broken: json['AIRCONDITIONER_BROKEN_1'] as bool? ?? false,
+      airConditioner2Broken: json['AIRCONDITIONER_BROKEN_2'] as bool? ?? false,
+      generatorBroken: json['GENERATOR_BROKEN'] as bool? ?? false,
     );
 
 Map<String, bool> _$CenterControlAlertToJson(CenterControlAlert instance) =>
@@ -48,4 +51,7 @@ Map<String, bool> _$CenterControlAlertToJson(CenterControlAlert instance) =>
       'HEART_BEAT': instance.heartBeat,
       'DOOR1': instance.door1OpenDetected,
       'DOOR2': instance.door2OpenDetected,
+      'AIRCONDITIONER_BROKEN_1': instance.airConditioner1Broken,
+      'AIRCONDITIONER_BROKEN_2': instance.airConditioner2Broken,
+      'GENERATOR_BROKEN': instance.generatorBroken
     };

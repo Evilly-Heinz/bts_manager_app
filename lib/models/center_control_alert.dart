@@ -21,6 +21,9 @@ class CenterControlAlert {
   bool heartBeat;
   bool door1OpenDetected;
   bool door2OpenDetected;
+  bool airConditioner1Broken;
+  bool airConditioner2Broken;
+  bool generatorBroken;
 
   CenterControlAlert({
     this.fireDetected = false,
@@ -41,6 +44,9 @@ class CenterControlAlert {
     this.heartBeat = false,
     this.door1OpenDetected = false,
     this.door2OpenDetected = false,
+    this.airConditioner1Broken = false,
+    this.airConditioner2Broken = false,
+    this.generatorBroken = false,
   });
 
   factory CenterControlAlert.fromJson(Map<String, dynamic> json) =>

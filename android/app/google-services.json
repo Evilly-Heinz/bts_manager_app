@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "641301277916",
+    "project_id": "abs-center-control",
+    "storage_bucket": "abs-center-control.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:641301277916:android:56f240401404216227d819",
+        "android_client_info": {
+          "package_name": "com.espace.bts_manager_app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAIQ6UnonF85T5BKagxtXwePPeRlN42_Cs"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

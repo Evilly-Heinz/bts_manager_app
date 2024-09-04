@@ -1,6 +1,14 @@
+import 'dart:io';
+
 import 'package:bts_manager_app/backend/api_request/authenitcation.dart';
+import 'package:bts_manager_app/firebase_options.dart';
+import 'package:bts_manager_app/page/bts_list_page.dart';
 import 'package:bts_manager_app/providers/authentication.provider.dart';
 import 'package:bts_manager_app/providers/mqtt.provider.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:flutter/foundation.dart';
+// import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:bts_manager_app/page/login.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -8,7 +16,37 @@ import 'package:provider/provider.dart';
 
 import 'providers/alert_manager.dart';
 
-void main() {
+Future<void> setupFlutterNotifications() async {
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
+  final notificationSettings =
+      await FirebaseMessaging.instance.requestPermission(
+    alert: true,
+    announcement: false,
+    badge: true,
+    carPlay: false,
+    criticalAlert: false,
+    provisional: false,
+    sound: true,
+  );
+  if (notificationSettings.authorizationStatus ==
+      AuthorizationStatus.authorized) {
+    final apnsToken = await FirebaseMessaging.instance.getAPNSToken();
+    final token = await FirebaseMessaging.instance.getToken();
+    if (apnsToken != null || token != null) {
+      // APNS token is available, make FCM plugin API requests...
+    }
+  }
+}
+
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  // FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
+  if (!kIsWeb && defaultTargetPlatform == TargetPlatform.android) {
+    await setupFlutterNotifications();
+  }
+
   runApp(MultiProvider(
       providers: [
         Provider(create: (context) => AuthenticationProvider()),
@@ -17,25 +55,63 @@ void main() {
       ],
       child: Consumer<AuthenticationProvider>(
         builder: (context, auth, child) {
-          return MyApp();
+          return const Application();
         },
       )));
 }
 
-class MyApp extends StatelessWidget {
-  MyApp({super.key});
-  final AuthenticationService _authenticationService = AuthenticationService();
+/// Renders the example application.
+class Application extends StatefulWidget {
+  const Application({super.key});
+  @override
+  State<StatefulWidget> createState() => _Application();
+}
 
+class _Application extends State<Application> {
+  String? initialMessage;
+  Future<void> setupInteractedMessage() async {
+    // Get any messages which caused the application to open from
+    // a terminated state.
+    RemoteMessage? initialMessage =
+        await FirebaseMessaging.instance.getInitialMessage();
+    // If the message also contains a data property with a "type" of "chat",
+    // navigate to a chat screen
+    if (initialMessage != null) {
+      _handleMessage(initialMessage);
+    }
+
+    // Also handle any interaction when the app is in the background via a
+    // Stream listener
+    FirebaseMessaging.onMessageOpenedApp.listen(_handleMessage);
+  }
+
+  void _handleMessage(RemoteMessage message) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text('Message data: ${message.data}'),
+      ),
+    );
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    if (Platform.isAndroid) {
+      setupInteractedMessage();
+    }
+  }
+
+  final AuthenticationService _authenticationService = AuthenticationService();
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
+      title: 'BTS Manager',
       theme: ThemeData(
-          colorScheme: ColorScheme.fromSeed(
-              seedColor: const Color.fromARGB(1, 9, 10, 100),
-              primary: const Color.fromARGB(1, 9, 10, 100),
-              secondary: const Color.fromARGB(1, 237, 28, 36)),
-          useMaterial3: true,
+        colorScheme: ColorScheme.fromSeed(
+            seedColor: const Color.fromARGB(1, 9, 10, 100),
+            primary: const Color.fromARGB(1, 9, 10, 100),
+            secondary: const Color.fromARGB(1, 237, 28, 36)),
+        useMaterial3: true,
         textTheme: GoogleFonts.playTextTheme(),
         cardTheme: CardTheme(
           shape: RoundedRectangleBorder(
@@ -47,60 +123,12 @@ class MyApp extends StatelessWidget {
         future: _authenticationService.getAccessToken(),
         builder: (context, snapshot) {
           if (snapshot.hasData) {
-            return const MyHomePage(title: 'Home Page');
+            return const BtsListPage();
           } else {
             return const LoginWidget();
           }
         },
       ), // Update the home property to navigate to LoginPage
-    );
-  }
-}
-
-class MyHomePage extends StatefulWidget {
-  const MyHomePage({super.key, required this.title});
-
-  final String title;
-
-  @override
-  State<MyHomePage> createState() => _MyHomePageState();
-}
-
-class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
-
-  void _incrementCounter() {
-    setState(() {
-      _counter++;
-    });
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-        title: Text(widget.title),
-      ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            const Text(
-              'You have pushed the button this many times:',
-            ),
-            Text(
-              '$_counter',
-              style: Theme.of(context).textTheme.headlineMedium,
-            ),
-          ],
-        ),
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
-        tooltip: 'Increment',
-        child: const Icon(Icons.add),
-      ),
     );
   }
 }
